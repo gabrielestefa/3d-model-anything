@@ -72,7 +72,8 @@ To install a newer build, use the same steps with the new `.ipa`. Sideloadly ove
 
 | Symptom | Fix |
 |---|---|
-| `Login failed (-80045/-80046): This action cannot be completed at this time` | Apple-side problem, not your password or Trust. Since 2026-10-12 Apple rejects sign-ins from many free sideloading tools. Update Sideloadly and try **once**; repeated attempts get throttled. Use the 2FA code from a trusted Apple device, not SMS. If it still fails, try **iloader** ("Import any IPA", sign-in fixed in v2.3.7+, use its built-in anisette server), or the paid-account route in FORK-NOTES. |
+| `Login failed (-80045/-80046): This action cannot be completed at this time` | Apple-side problem, not your password or Trust. Since 2026-10-12 Apple rejects sign-ins from many free sideloading tools. Update Sideloadly and try **once**; repeated attempts get throttled. Use the 2FA code from a trusted Apple device, not SMS. If it still fails, use **iloader** ("Import any IPA", sign-in fixed in v2.3.7+, built-in anisette server). It worked here on 2026-10-23. Otherwise use the paid-account route in FORK-NOTES. |
+| iloader: `Auth error -22406: Enter the correct password` | You're past Apple's block, but the password was rejected. Check it at account.apple.com first; repeated failures can lock the account. Use the main password, not an app-specific one, and watch the keyboard layout. |
 | Sideloadly doesn't see the phone | Make sure iTunes and iCloud are the non-Store versions, then unlock the phone, re-plug it and tap Trust. |
 | "Untrusted Developer" on launch | Repeat step 3.4 (VPN & Device Management → Trust). |
 | App icon present but won't open | The signature has expired. Re-sign as in step 4. |
