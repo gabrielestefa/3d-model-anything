@@ -9,8 +9,8 @@ Fork of [wesbos/3d-model-anything](https://github.com/wesbos/3d-model-anything).
 
 | Milestone | State |
 |---|---|
-| M1: cloud build of unsigned `.ipa` (GitHub Actions) | Written and lint-checked, **not yet run** |
-| M2: sign and install via Sideloadly on Windows | Pending M1 |
+| M1: cloud build of unsigned `.ipa` (GitHub Actions) | ✅ Done 2026-10-22: run #1 succeeded in 1m56s, artifact 4.8 MB (zip) |
+| M2: sign and install via Sideloadly on Windows | **Next** |
 | M3: first scan, in-app 3D review, backup to Files | Pending M2 |
 | (optional) M4: view own reconstructed rooms in the web viewer | Not started |
 
@@ -45,6 +45,12 @@ The workflow fails if the `.app` is missing or its `CFBundleIdentifier` doesn't 
 | `demos/` | Reconstructed rooms. A new room goes in `demos/<id>/` and is registered in `demos/index.ts`. |
 | `tools/audit-public.py` | Runs in `check.yml` on every push. It rejects macOS home-folder paths (Users + username), credentials, unlisted `data/` files and unreviewed demos. |
 
+## Build log
+
+| Run | Date | Result | Notes |
+|---|---|---|---|
+| #1 ([39858014234](https://github.com/gabrielestefa/3d-model-anything/actions/runs/39858014234)) | 2026-10-22 | ✅ success, 1m56s | `xcode-27` label accepted. Bundle-ID assert passed. Artifact expires 2027-01-20. Xcode/SDK version: see the *Show toolchain* step. |
+
 ## Gotchas
 
 - **SDK floor:** `HouseViewer.swift` calls `glassEffect` (iOS 26 SDK) behind `#available`. Build with Xcode 26 or newer. The deployment target is still iOS 17.
@@ -54,13 +60,17 @@ The workflow fails if the `.app` is missing or its `CFBundleIdentifier` doesn't 
 - **Inherited workflows:** `pages.yml` fails on this fork until Pages is enabled, so disable it or enable Pages. `check.yml` is harmless.
 - **actionlint 1.7.12** flags the `xcode-27` label as unknown. The label is newer than that linter release (GA 2026-10-15). If it's ever unavailable, use `macos-26` plus `xcode-select`.
 - **`audit-public.py`:** new docs must not contain a macOS home-folder path (slash, `Users`, slash, a name, slash), not even as an example, or `check.yml` fails. This file tripped it once.
+- **Node 20 deprecation:** GitHub warns that `actions/checkout@v4` and `actions/upload-artifact@v4` target Node 20 and now run on Node 24. Builds still work, and upstream uses the same versions. Bump them only if they start failing.
+- **Claude sandbox limits:** a Claude session can trigger runs and read run status, but it can't download Actions logs or artifacts (blocked by its network allowlist). Download from github.com instead.
 - **A14 device:** the app throttles depth and photo capture under thermal or memory pressure, which happens sooner than on newer phones.
 
 ## Remaining tasks
 
-- [ ] Push these files to the fork (the session had no write access when they were written).
-- [ ] Enable Actions on the fork and disable `Deploy viewer`.
-- [ ] Run the workflow and confirm the `xcode-27` label and build succeed. Record the Xcode and SDK versions here.
+- [x] Push these files to the fork.
+- [x] Actions enabled on the fork (it was on by default).
+- [x] Run the workflow: the `xcode-27` label works and the build succeeded.
+- [ ] Decide on `Deploy viewer`: disable it, or enable Pages for M4. It fails on every push until then.
+- [ ] Record the Xcode and SDK versions from the *Show toolchain* step of run #1.
 - [ ] Install via Sideloadly and confirm Developer Mode, trust, camera permission and first scan.
 - [ ] Optional: check whether Sideloadly's auto-refresh fits, to avoid the weekly manual re-sign.
 - [ ] Optional M4: export a scan to the PC, run `scan-to-threejs`, and host your own viewer on Pages.
