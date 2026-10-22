@@ -10,7 +10,7 @@ Fork of [wesbos/3d-model-anything](https://github.com/wesbos/3d-model-anything).
 | Milestone | State |
 |---|---|
 | M1: cloud build of unsigned `.ipa` (GitHub Actions) | ✅ Done 2026-10-22: run #1 succeeded in 1m56s, artifact 4.8 MB (zip) |
-| M2: sign and install via Sideloadly on Windows | **Next** |
+| M2: sign and install via Sideloadly on Windows | **Blocked**: Apple ID sign-in error -80046 (2026-10-23) |
 | M3: first scan, in-app 3D review, backup to Files | Pending M2 |
 | (optional) M4: view own reconstructed rooms in the web viewer | Not started |
 
@@ -62,6 +62,8 @@ The workflow fails if the `.app` is missing or its `CFBundleIdentifier` doesn't 
 - **`audit-public.py`:** new docs must not contain a macOS home-folder path (slash, `Users`, slash, a name, slash), not even as an example, or `check.yml` fails. This file tripped it once.
 - **Node 20 deprecation:** GitHub warns that `actions/checkout@v4` and `actions/upload-artifact@v4` target Node 20 and now run on Node 24. Builds still work, and upstream uses the same versions. Bump them only if they start failing.
 - **Sideloadly auto refresh isn't cloud-based:** the PC daemon re-signs only while it can see the phone (USB, or same Wi-Fi with iTunes Wi-Fi sync and the screen on). About 7 days apart means the app expires. Source: sideloadly.io/faq.html.
+- **Apple ID sign-in breakage (Oct 2026):** since 2026-10-12, Apple rejects sign-ins from free signing tools with "This action cannot be completed at this time" (-80045; -80046 reported from 2026-10-21). Developers suspect Apple now checks the device identity ("anisette") the tools send. Fixes ship per tool: iloader 2.3.7+ and SideInstaller 1.5.0+ are fixed; Sideloadly 0.71.0 reworked sign-in but doesn't claim a fix; AltStore and SideStore were unfixed as of 2026-10-20. Hit on the first install here with Trust done, so it isn't a pairing issue.
+- **Fallback without third-party sign-in:** a paid Apple Developer account ($99/yr) lets CI sign the app and ship it through TestFlight (App Store Connect API key + distribution cert as secrets). No PC sign-in, builds valid 90 days. Not implemented.
 - **Claude sandbox limits:** a Claude session can trigger runs and read run status, but it can't download Actions logs or artifacts (blocked by its network allowlist). Download from github.com instead.
 - **A14 device:** the app throttles depth and photo capture under thermal or memory pressure, which happens sooner than on newer phones.
 
