@@ -41,8 +41,23 @@ Artifacts expire after 90 days. To get a fresh copy, re-run the workflow.
 
 The signature expires after 7 days. The app stays on the phone but won't open until you re-sign it. Your scans are kept.
 
+### Automatic (Sideloadly daemon, recommended)
+
+Turn on **auto refresh** when you sideload. The Sideloadly daemon on the PC then re-signs the app when it nears expiry, but only at moments when it can reach the phone:
+
+- **The PC:** on, with the Sideloadly daemon running.
+- **The phone:** plugged in by USB, **or** on the same Wi-Fi as the PC.
+- **Wi-Fi refresh setup (once):** connect by USB and enable Wi-Fi sync in iTunes (device → Summary → *Sync with this iPhone over Wi-Fi*).
+- **During a Wi-Fi refresh:** the phone's screen must be on. If the phone isn't detected, opening iTunes on the PC can help.
+
+If the phone and PC don't meet for about 7 days (travel, PC off), the app expires. Re-sign it manually as below.
+
+### Manual
+
 1. Connect the iPhone to the PC.
 2. In Sideloadly, use the **same** `.ipa`, Apple ID and bundle ID, then click **Start**. This installs over the existing app.
+
+To install a newer build, use the same steps with the new `.ipa`. Sideloadly overwrites the old version and keeps it enrolled for auto refresh.
 
 > ⚠️ **Never delete the app before re-signing.** The scans live inside the app's storage, and deleting the app deletes them.
 

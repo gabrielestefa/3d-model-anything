@@ -61,6 +61,7 @@ The workflow fails if the `.app` is missing or its `CFBundleIdentifier` doesn't 
 - **actionlint 1.7.12** flags the `xcode-27` label as unknown. The label is newer than that linter release (GA 2026-10-15). If it's ever unavailable, use `macos-26` plus `xcode-select`.
 - **`audit-public.py`:** new docs must not contain a macOS home-folder path (slash, `Users`, slash, a name, slash), not even as an example, or `check.yml` fails. This file tripped it once.
 - **Node 20 deprecation:** GitHub warns that `actions/checkout@v4` and `actions/upload-artifact@v4` target Node 20 and now run on Node 24. Builds still work, and upstream uses the same versions. Bump them only if they start failing.
+- **Sideloadly auto refresh isn't cloud-based:** the PC daemon re-signs only while it can see the phone (USB, or same Wi-Fi with iTunes Wi-Fi sync and the screen on). About 7 days apart means the app expires. Source: sideloadly.io/faq.html.
 - **Claude sandbox limits:** a Claude session can trigger runs and read run status, but it can't download Actions logs or artifacts (blocked by its network allowlist). Download from github.com instead.
 - **A14 device:** the app throttles depth and photo capture under thermal or memory pressure, which happens sooner than on newer phones.
 
@@ -72,5 +73,5 @@ The workflow fails if the `.app` is missing or its `CFBundleIdentifier` doesn't 
 - [ ] Decide on `Deploy viewer`: disable it, or enable Pages for M4. It fails on every push until then.
 - [ ] Record the Xcode and SDK versions from the *Show toolchain* step of run #1.
 - [ ] Install via Sideloadly and confirm Developer Mode, trust, camera permission and first scan.
-- [ ] Optional: check whether Sideloadly's auto-refresh fits, to avoid the weekly manual re-sign.
+- [ ] Set up Sideloadly auto refresh (daemon + iTunes Wi-Fi sync) and confirm it renews before day 7.
 - [ ] Optional M4: export a scan to the PC, run `scan-to-threejs`, and host your own viewer on Pages.
