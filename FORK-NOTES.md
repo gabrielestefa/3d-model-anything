@@ -68,6 +68,9 @@ Result for the quick test: walls, vault, floor and 10 furniture blockouts. Measu
 - **HemisphereLight ground color tints ceilings:** downward-facing surfaces take the ground color. A dark wood-floor color turned a white vault brown. Use a pale bounce color.
 - **Skill capture scripts are zsh plus `agent-browser`:** on Windows they need WSL. In Claude's sandbox, `agent-browser install` can't download Chrome. `@sparticuz/chromium` + `puppeteer-core` from npm gives headless Chrome with WebGL2 (SwiftShader), so `cap.sh` was ported to a small Node script.
 - **Artifact hosting:** it doesn't serve `.bin` files, so the scan ships as base64 inside `.json`. Build with `VIEWER_BASE=./`, drop the office demo (`VITE_ONLY_UPPER_FLOOR=1` in the private copy) and hide the *Play* link, which needs `play.html` and the Rapier wasm.
+- **Small objects (detail pass):** RoomPlan reports only large furniture. Find objects on each support surface as connected blobs of mesh vertices above the surface (2 cm grid, `scipy.ndimage.label`), taking footprint, top height and median scan color per blob. Model them as simple hints.
+- **LiDAR misses thin and glossy things:** a monitor's black screen and a thin lamp pole barely register. Size them from the photos instead. A light source can be located by voting: project candidate 3D points into every posed photo and keep the point that lands on saturated pixels most often.
+- **Reading photos against the model:** camera right = `forward × up`. Check left/right placement in a photo-matched render before trusting a photo for which side an object is on. Two items came out mirrored on the first try.
 - **Privacy:** the fork is public, and `demos/<room>/`, `data/demos/<room>*` and `data/web-assets/<room>/` are not gitignored. Never commit them here. `audit-public.py` would also fail `check.yml` on them.
 
 ## Build log
@@ -105,4 +108,4 @@ Result for the quick test: walls, vault, floor and 10 furniture blockouts. Measu
 - [x] M4 quick test: one room processed (private).
 - [ ] M5: choose where processing lives. Options: (a) keep using a Claude workspace per room, (b) local on Windows (WSL for the zsh scripts + Node 22 + Python/Pillow), (c) a **private** repo for personal rooms (a fork of a public repo can't be private).
 - [ ] Generalize the room-specific prep script (ceiling heightfield, scan export, mesh probes) into a reusable tool.
-- [ ] Optional detail pass on the attic: monitor, floor lamp, wall plaster texture, lamp-matched lighting.
+- [x] Detail pass test: small-object hints from mesh blobs + photo voting for the light (private).
